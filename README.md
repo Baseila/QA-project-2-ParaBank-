@@ -179,3 +179,106 @@ The following test cases are designed to validate the functional requirements.
 - Functional authentication service.
 - ParaBank web application UI framework.
 - Audit logging infrastructure.
+---
+
+# ParaBank Login Test Suite - Postman Collection
+
+This repository contains a comprehensive Postman collection for testing the login functionality of the ParaBank application. It is designed to be a practical companion to the **Software Test Plan (STP)** and **Functional Requirements Document (FRD)**.
+
+The collection covers functional, security, and integration scenarios via the ParaBank REST API. It includes a mix of fully automated API tests, API calls that support manual UI verification, and placeholders for tests that must be performed manually.
+
+## Features
+
+-   **Structured Test Suites:** Requests are organized into folders based on test type (Functional, Security, Usability, Backend).
+-   **Direct Mapping to Test Cases:** Each request name is mapped to a Test Case ID (e.g., `C1 / TC01`) from the project's formal test documentation.
+-   **Automated Validation:** JavaScript tests are embedded in requests to automatically assert response status, body content, and functional correctness.
+-   **Security Penetration Tests:** Includes basic checks for common vulnerabilities like SQL Injection and XSS.
+-   **Stateful Scenarios:** Demonstrates how to test features like session management and brute-force protection using Postman's scripting and Collection Runner.
+-   **Clear Documentation:** Each request includes a detailed description of its objective, steps, and expected results.
+
+## Prerequisites
+
+1.  **Postman App:** You must have the [Postman Desktop App](https://www.postman.com/downloads/) installed.
+2.  **Import the Collection:**
+    -   Download the `ParaBank Login Test Suite.postman_collection.json` file.
+    -   In Postman, click **Import** and upload the file.
+
+## Setup and Configuration
+
+The collection uses a single collection-level variable to manage the target environment.
+
+-   `{{baseUrl}}`: The base URL for the ParaBank API.
+    -   **Default Value:** `https://parabank.parasoft.com/parabank/services/bank`
+    -   You can edit this variable in the collection's "Variables" tab to point to a local or different staging environment.
+
+## How to Use
+
+### 1. Running Individual Requests
+
+You can run any request individually by selecting it and clicking **Send**. After the request completes, check the **Tests** tab in the response pane to see the results of the automated assertions.
+
+### 2. Running the Full Suite (or Folders)
+
+For stateful tests that must run in sequence (like **Account Lockout** or **Session Management**), you must use the Collection Runner.
+
+1.  Hover over the collection or a specific folder and click the **▶ Run** button.
+2.  The Collection Runner window will open.
+3.  Ensure the requests are in the correct order.
+4.  Click **Run ParaBank Login Test Suite**.
+5.  The runner will execute all requests and display a summary of the test results.
+
+---
+
+## Test Suite Structure
+
+The collection is organized into the following test suites:
+
+### 📁 Functional Tests
+
+Tests covering the core functionality of the login process.
+
+| Test Case ID | Request Name / Objective                                | Type                | Key Checks / Notes                                                 |
+| :----------- | :------------------------------------------------------ | :------------------ | :----------------------------------------------------------------- |
+| `C1 / TC01`  | Login with valid username and password                  | API (Automated)     | Verifies 200 OK status and that the response contains customer XML. Saves `customerId` for other tests. |
+| `C2 / TC02`  | Login with valid username and invalid password          | API (Automated)     | Verifies the response contains the "Invalid username and password" error message. |
+| `C3 / TC03`  | Login with invalid username and valid password          | API (Automated)     | Verifies the response contains the "Invalid username and password" error message. |
+| `C4 / TC04`  | Submit login form with empty fields                     | API (Automated)     | Verifies that an invalid URL path results in a 404 Not Found error. |
+| `C5 / TC05`  | Submit login form with whitespace-only input            | API (Automated)     | Verifies the system treats whitespace as invalid credentials and shows an error. |
+| `C6 / TC06`  | Click “Forgot login info?” link (API Alternative)       | API (Manual Check)  | Tests the underlying customer lookup API that the UI feature depends on. |
+| `C7 / TC07`  | Click “Register” link                                   | **Manual / UI Test**| Placeholder to remind the tester to verify the 'Register' link navigation in the browser. |
+
+### 📁 Security Tests
+
+Tests for common security vulnerabilities.
+
+| Test Case ID | Request Name / Objective                                | Type                 | Key Checks / Notes                                                 |
+| :----------- | :------------------------------------------------------ | :------------------- | :----------------------------------------------------------------- |
+| `C8 / TC08`  | Attempt login with SQL injection payload                | API (Automated)      | Verifies the application rejects the input gracefully and does **not** return a 500 error. |
+| `C9 / TC09`  | Attempt login with XSS script payload                   | API (Automated)      | Verifies the application sanitizes the input, fails the login, and does **not** return a 500 error. |
+| `C10 / TC13` | Account lockout after 5 failed login attempts           | API (Stateful)       | **Requires Collection Runner.** Simulates 5 failed attempts and checks the 6th. |
+
+### 📁 Usability & Accessibility Tests
+
+Placeholders for manual UI-based tests.
+
+| Test Case ID | Request Name / Objective                     | Type                 | Key Checks / Notes                                                 |
+| :----------- | :------------------------------------------- | :------------------- | :----------------------------------------------------------------- |
+| `C11 / TC10` | Verify password masking                      | **Manual / UI Test** | Manually verify that characters typed in the password field are obscured. |
+| `C12 / TC11` | Navigate form using only keyboard            | **Manual / UI Test** | Manually verify all form elements are focusable in a logical order using the Tab key. |
+| `C13 / TC12` | Responsive design on mobile device           | **Manual / UI Test** | Manually verify the page layout in a browser's responsive design mode. |
+
+### 📁 Backend & Integration Tests
+
+Tests for backend processes like logging and session management.
+
+| Test Case ID | Request Name / Objective                                | Type                          | Key Checks / Notes                                                 |
+| :----------- | :------------------------------------------------------ | :---------------------------- | :----------------------------------------------------------------- |
+| `C14 / TC14` | Verify audit log entry after login attempt              | **Not Automatable (White-Box)** | Placeholder. Requires backend access to query logs or a database to verify. |
+| `C15 / TC15` | Verify session management after successful login        | API (Stateful)                | **Requires Collection Runner.** Logs in, saves the `customerId`, and uses it to access a protected endpoint (`/accounts`). |
+
+## Collection Variables
+
+| Variable       | Purpose                                                                |
+| :------------- | :--------------------------------------------------------------------- |
+| `baseUrl`      | The base URL for the ParaBank API endpoint.                            |
+| `customerId`   | Stores the customer ID after a successful login. It is set dynamically and used by subsequent requests to test session-dependent functionality. |
