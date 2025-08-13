@@ -24,7 +24,6 @@ This repository contains the Quality Assurance documentation for the **Customer 
     *   [8. Test Deliverables](#8-test-deliverables)
     *   [9. Schedule](#9-schedule)
     *   [10. Risks & Mitigation](#10-risks--mitigation)
-    *   [11. Approval](#11-approval)
 *   [Functional Requirements Document (FRD)](#functional-requirements-document-frd)
     *   [1. Feature Overview](#1-feature-overview)
     *   [2. Objectives](#2-objectives)
