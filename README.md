@@ -111,11 +111,6 @@ The test execution will be planned over a 2-week sprint:
 | Delayed delivery of build      | Adjust test schedule and prioritize critical cases. |
 | Test data inconsistencies      | Maintain controlled and isolated test data sets.    |
 
-### 11. Approval
-Prepared By: ___________________ Date: ___________
-Reviewed By: ___________________ Date: ___________
-Approved By: ___________________ Date: ___________
-
 
 ---
 
