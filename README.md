@@ -8,7 +8,7 @@ This repository contains the Quality Assurance documentation for the **Customer 
 | -------------------- | ------------------------ |
 | **Project**          | ParaBank QA Automation   |
 | **Feature**          | Customer Login           |
-| **Author**           | Baseeil Elwali           |
+| **Author**           | Baseeil Jaber           |
 | **Date**             | August 10, 2025          |
 | **Version**          | 1.1                      |
 
