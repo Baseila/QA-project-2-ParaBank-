@@ -31,7 +31,19 @@ This repository contains the Quality Assurance documentation for the **Customer 
     *   [4. Test Cases](#4-test-cases)
     *   [5. Security Considerations](#5-security-considerations)
     *   [6. Dependencies](#6-dependencies)
-
+*   [ParaBank Login Test Suite - Postman Collection](#parabank-login-test-suite---postman-collection)
+    *   [Features](#features)
+    *   [Prerequisites](#prerequisites)
+    *   [Setup and Configuration](#setup-and-configuration)
+    *   [How to Use](#how-to-use)
+    *   [Test Suite Structure](#test-suite-structure)
+    *   [Collection Variables](#collection-variables)
+*   [ParaBank Login API Test Suite (JMeter)](#parabank-login-api-test-suite-jmeter)
+    *   [Overview](#overview)
+    *   [Test Scenarios Included](#test-scenarios-included)
+    *   [Excluded Scenarios (Manual/UI Tests)](#excluded-scenarios-manualui-tests)
+    *   [How to Use](#how-to-use-1)
+    *   [JMeter Plan Structure](#jmeter-plan-structure)
 ---
 
 ## Software Test Plan (STP)
