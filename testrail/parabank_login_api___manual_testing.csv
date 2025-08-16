@@ -1,0 +1,12 @@
+"ID","Title","Assigned To","Case ID","Comment","Defects","Elapsed","Estimate","Forecast","In Progress","Plan","Plan ID","Priority","References","Run","Run Configuration","Run ID","Section","Section Depth","Section Description","Status","Tested By","Tested On","Type","Version"
+"T10","TC06: Click “Forgot login info?” link","AL ABO","C6","clicking on forger rediect to
+https://parabank.parasoft.com/parabank/lookup.htm
+which contains reset option","","","1s","1s","","","","Medium","","ParaBank Login API - Manual Testing","","R2","Functional Tests","1","Tests covering the core functionality of the login process.","Passed","AL ABO","8/16/2025 6:42 AM","Functional",""
+"T11","TC07: Click “Register” link","AL ABO","C7","clicking register link redirect to https://parabank.parasoft.com/parabank/register.htm
+which contains singup option
+","","","1s","1s","","","","Medium","","ParaBank Login API - Manual Testing","","R2","Functional Tests","1","Tests covering the core functionality of the login process.","Passed","AL ABO","8/16/2025 6:43 AM","Functional",""
+"T17","TC10: Verify password masking","AL ABO","C11","pass mask all aboard","","","1s","1s","","","","Medium","","ParaBank Login API - Manual Testing","","R2","Usability & Accessibility Tests","1","Tests for user experience, accessibility, and responsiveness.","Passed","AL ABO","8/16/2025 6:44 AM","Usability",""
+"T12","TC11: Navigate form using only keyboard","AL ABO","C12","you connot navigate form using only keyboard
+any form register/login and so on","","","3s","3s","","","","Medium","","ParaBank Login API - Manual Testing","","R2","Usability & Accessibility Tests","1","Tests for user experience, accessibility, and responsiveness.","Failed","AL ABO","8/16/2025 6:44 AM","Accessibility",""
+"T13","TC12: Responsive design on mobile device","AL ABO","C13","website is not responsive to mobile any way","","","5s","5s","","","","Medium","","ParaBank Login API - Manual Testing","","R2","Usability & Accessibility Tests","1","Tests for user experience, accessibility, and responsiveness.","Failed","AL ABO","8/16/2025 6:45 AM","Usability",""
+"T14","TC14: Verify audit log entry after login attempt","AL ABO","C14","log entry after login attempt ","","","10s","10s","","","","Medium","","ParaBank Login API - Manual Testing","","R2","Backend & Integration Tests","1","Tests for backend processes like logging and session management.","Passed","AL ABO","8/16/2025 7:02 AM","Functional",""

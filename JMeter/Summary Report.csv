@@ -1,0 +1,24 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1755327642569,2492,Functional Tests,404,"Number of samples in transaction : 5, number of failing samples : 1",QA Scenarios Thread Group 1-1,,false,,1921,810,1,1,null,0,4,815
+1755327642570,1442,C1 / TC01: Login with valid username and password,200,OK,QA Scenarios Thread Group 1-1,text,true,"Index -1 out of bounds for length 128
+See log file for further details.",560,161,1,1,https://parabank.parasoft.com/parabank/services/bank/login/john/demo,1442,0,815
+1755327644013,305,C2 / TC02: Login with valid username and invalid password,400,Bad Request,QA Scenarios Thread Group 1-1,text,true,,290,170,1,1,https://parabank.parasoft.com/parabank/services/bank/login/john/wrongpassword,305,0,0
+1755327644319,234,C3 / TC03: Login with invalid username and valid password,400,Bad Request,QA Scenarios Thread Group 1-1,text,true,,290,168,1,1,https://parabank.parasoft.com/parabank/services/bank/login/invaliduser/demo,234,0,0
+1755327644553,277,C4 / TC04: Submit login form with empty fields,404,Not Found,QA Scenarios Thread Group 1-1,,false,,245,152,1,1,https://parabank.parasoft.com/parabank/services/bank/login//,277,0,0
+1755327644830,234,C5 / TC05: Submit login form with whitespace-only input,200,OK,QA Scenarios Thread Group 1-1,text,true,,536,159,1,1,https://parabank.parasoft.com/parabank/services/bank/login/%20/%20,234,0,0
+1755327645066,2455,Security Tests,403,"Number of samples in transaction : 3, number of failing samples : 3",QA Scenarios Thread Group 1-1,,false,,11899,1316,1,1,null,0,3,132
+1755327645066,86,C8 / TC08: Attempt login with SQL injection payload,403,Forbidden,QA Scenarios Thread Group 1-1,text,false,Test failed: text expected to contain /Invalid username and password/,8366,177,1,1,https://parabank.parasoft.com/parabank/services/bank/login/%27%20OR%201=1--/password,75,0,0
+1755327645152,0,C9 / TC09: Attempt login with XSS script payload,Non HTTP response code: java.net.URISyntaxException,Non HTTP response message: Illegal character in path at index 59: https://parabank.parasoft.com/parabank/services/bank/login/<script>alert('XSS')</script>/password,QA Scenarios Thread Group 1-1,text,false,Test failed: text expected to contain /could not be found/,1233,0,1,1,https://parabank.parasoft.com/parabank/services/bank/login/<script>alert('XSS')</script>/password,0,0,0
+1755327645153,2369,C10 / TC13: Account lockout after 5 failed login attempts,400,"Number of samples in transaction : 7, number of failing samples : 1",QA Scenarios Thread Group 1-1,,false,,2300,1139,1,1,null,0,2,132
+1755327645153,679,Failed Attempt 1,400,Bad Request,QA Scenarios Thread Group 1-1,text,true,,290,163,1,1,https://parabank.parasoft.com/parabank/services/bank/login/john/wrong1,679,0,132
+1755327645832,330,Failed Attempt 2,400,Bad Request,QA Scenarios Thread Group 1-1,text,true,,290,163,1,1,https://parabank.parasoft.com/parabank/services/bank/login/john/wrong2,330,0,0
+1755327646162,308,Failed Attempt 3,400,Bad Request,QA Scenarios Thread Group 1-1,text,true,,290,163,1,1,https://parabank.parasoft.com/parabank/services/bank/login/john/wrong3,308,0,0
+1755327646470,234,Failed Attempt 4,400,Bad Request,QA Scenarios Thread Group 1-1,text,true,,290,163,1,1,https://parabank.parasoft.com/parabank/services/bank/login/john/wrong4,234,0,0
+1755327646704,277,Failed Attempt 5,400,Bad Request,QA Scenarios Thread Group 1-1,text,true,,290,163,1,1,https://parabank.parasoft.com/parabank/services/bank/login/john/wrong5,277,0,0
+1755327646982,307,Failed Attempt 6,400,Bad Request,QA Scenarios Thread Group 1-1,text,false,,290,163,1,1,https://parabank.parasoft.com/parabank/services/bank/login/john/wrong5,307,0,0
+1755327647289,234,C1 / TC01: Login with valid username and password,200,OK,QA Scenarios Thread Group 1-1,text,true,"Index -1 out of bounds for length 128
+See log file for further details.",560,161,1,1,https://parabank.parasoft.com/parabank/services/bank/login/john/demo,234,0,0
+1755327647524,583,Backend & Integration Tests,200,"Number of samples in transaction : 1, number of failing samples : 0",QA Scenarios Thread Group 1-1,,true,,6303,331,1,1,null,0,1,0
+1755327647524,583,C15 / TC15: Verify session management after successful login,200,"Number of samples in transaction : 2, number of failing samples : 0",QA Scenarios Thread Group 1-1,,true,,6303,331,1,1,null,0,1,0
+1755327647524,276,Step 1: Successful Login,200,OK,QA Scenarios Thread Group 1-1,text,true,,560,161,1,1,https://parabank.parasoft.com/parabank/services/bank/login/john/demo,276,0,0
+1755327647801,307,Step 2: Get Accounts (Requires Login Session),200,OK,QA Scenarios Thread Group 1-1,text,true,,5743,170,1,1,https://parabank.parasoft.com/parabank/services/bank/customers/12212/accounts,307,0,0

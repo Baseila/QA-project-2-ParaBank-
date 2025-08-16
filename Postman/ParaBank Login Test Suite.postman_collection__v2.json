@@ -1,0 +1,603 @@
+{
+	"info": {
+		"_postman_id": "05c994b7-2079-4bac-9a97-97b32ebb5463",
+		"name": "ParaBank Login Test Suite",
+		"description": "A comprehensive Postman collection for testing the login functionality of the ParaBank application. It covers functional, security, and integration scenarios via the REST API.\n\n**Note:** Some test cases are marked as 'Manual/UI Test' as they target front-end behavior that cannot be validated through an API call.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9917303"
+	},
+	"item": [
+		{
+			"name": "Tests covering the core functionality of the login process.",
+			"item": [
+				{
+					"name": "C1 / TC01: Login with valid username and password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response contains customer information\", function () {",
+									"    // The response is XML, so we check for a key part of the success response",
+									"    pm.expect(pm.response.text()).to.include(\"<customer>\");",
+									"});",
+									"",
+									"pm.test(\"Customer ID is saved to a variable for session tests\", function () {",
+									"    const xml2js = require('xml2js');",
+									"    xml2js.parseString(pm.response.text(), (err, result) => {",
+									"        if (!err && result.customer && result.customer.id) {",
+									"            const customerId = result.customer.id[0];",
+									"            pm.collectionVariables.set(\"customerId\", customerId);",
+									"            console.log(`Saved customerId: ${customerId}`);",
+									"        }",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/login/john/demo",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"login",
+								"john",
+								"demo"
+							]
+						},
+						"description": "**Objective:** Verify that a user can successfully log in with correct credentials.\n\n**Steps:**\n1. Send a GET request to the `/login/{username}/{password}` endpoint with valid credentials.\n\n**Expected Result:**\n1. The API returns a `200 OK` status code.\n2. The response body contains the logged-in customer's XML data."
+					},
+					"response": []
+				},
+				{
+					"name": "C2 / TC02: Login with valid username and invalid password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 OK (as per API design)\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response body contains an error message\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"Invalid username and password.\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/login/john/wrongpassword",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"login",
+								"john",
+								"wrongpassword"
+							]
+						},
+						"description": "**Objective:** Verify that the system prevents login with an incorrect password.\n\n**Steps:**\n1. Send a GET request to the `/login/{username}/{password}` endpoint with a valid username and an invalid password.\n\n**Expected Result:**\n1. The system returns an error message indicating invalid credentials. *(Note: This specific API returns a 200 status but with an error message in the body)*"
+					},
+					"response": []
+				},
+				{
+					"name": "C3 / TC03: Login with invalid username and valid password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 OK (as per API design)\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response body contains an error message\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"Invalid username and password.\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/login/invaliduser/demo",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"login",
+								"invaliduser",
+								"demo"
+							]
+						},
+						"description": "**Objective:** Verify that the system prevents login with a non-existent username.\n\n**Steps:**\n1. Send a GET request to the `/login/{username}/{password}` endpoint with an invalid username and any password.\n\n**Expected Result:**\n1. The system returns an error message indicating invalid credentials."
+					},
+					"response": []
+				},
+				{
+					"name": "C4 / TC04: Submit login form with empty fields",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404 Not Found\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/login//",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"login",
+								"",
+								""
+							]
+						},
+						"description": "**Objective:** Verify that the system handles empty inputs gracefully.\n\n**Steps:**\n1. Send a GET request to the `/login/{username}/{password}` endpoint with empty strings for both parameters.\n\n**Expected Result:**\n1. The API should return a client error, likely a `404 Not Found`, because the URL path becomes invalid."
+					},
+					"response": []
+				},
+				{
+					"name": "C5 / TC05: Submit login form with whitespace-only input",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 OK (as per API design)\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response body contains an error message\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"Invalid username and password.\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/login/ / ",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"login",
+								" ",
+								" "
+							]
+						},
+						"description": "**Objective:** Verify that the system does not accept whitespace as valid credentials.\n\n**Steps:**\n1. Send a GET request to the `/login/{username}/{password}` endpoint with whitespace characters for both parameters.\n\n**Expected Result:**\n1. The system should treat this as an invalid login attempt and show an error."
+					},
+					"response": []
+				},
+				{
+					"name": "C6 / TC06: Click “Forgot login info?” link (API Alternative)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/customers/lookup?firstName=John&lastName=Smith&address.street=123 Main St&address.city=Anytown&address.state=CA&address.zipCode=90210&ssn=987654321",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"customers",
+								"lookup"
+							],
+							"query": [
+								{
+									"key": "firstName",
+									"value": "John"
+								},
+								{
+									"key": "lastName",
+									"value": "Smith"
+								},
+								{
+									"key": "address.street",
+									"value": "123 Main St"
+								},
+								{
+									"key": "address.city",
+									"value": "Anytown"
+								},
+								{
+									"key": "address.state",
+									"value": "CA"
+								},
+								{
+									"key": "address.zipCode",
+									"value": "90210"
+								},
+								{
+									"key": "ssn",
+									"value": "987654321"
+								}
+							]
+						},
+						"description": "**Objective:** Verify the backend functionality that supports the 'Forgot Login Info' feature.\n\n**API Test:**\nThis is an API test for the customer lookup service, which is what the 'Forgot Login' page uses.\n\n**Manual/UI Test:**\n1. Open the ParaBank login page.\n2. Click the 'Forgot login info?' link.\n3. Verify you are redirected to the customer lookup page.\n\n"
+					},
+					"response": []
+				}
+			],
+			"description": "Functional tests for the login process."
+		},
+		{
+			"name": "Security Tests",
+			"item": [
+				{
+					"name": "C10 / TC13: Account lockout after 5 failed login attempts",
+					"item": [
+						{
+							"name": "Failed Attempt 1",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/login/john/wrong1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"login",
+										"john",
+										"wrong1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Failed Attempt 2",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/login/john/wrong2",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"login",
+										"john",
+										"wrong2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Failed Attempt 3",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/login/john/wrong3",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"login",
+										"john",
+										"wrong3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Failed Attempt 4",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/login/john/wrong4",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"login",
+										"john",
+										"wrong4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Failed Attempt 5",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/login/john/wrong5",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"login",
+										"john",
+										"wrong5"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Attempt 6 (Should be locked)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// This is a conceptual test. The public ParaBank instance may not have this feature enabled.",
+											"// In a real environment, you'd check for a 'account locked' message.",
+											"pm.test(\"Check for account locked message (conceptual)\", function () {",
+											"    // Example: pm.expect(pm.response.text()).to.include(\"Your account has been locked\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/login/john/wrong6",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"login",
+										"john",
+										"wrong6"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"description": "**Objective:** Verify that the system locks an account after a configured number of consecutive failed login attempts.\n\n**Note:** This is a stateful test. You must run the requests in this folder sequentially using the Postman Runner. The public ParaBank instance may not have this specific security feature enabled or configured."
+				},
+				{
+					"name": "C8 / TC08: Attempt login with SQL injection payload",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is NOT 500 Internal Server Error\", function () {",
+									"    pm.response.to.not.have.status(500);",
+									"});",
+									"",
+									"pm.test(\"Login should fail gracefully\", function() {",
+									"    // A good outcome is an error message, not a successful login.",
+									"    pm.expect(pm.response.text()).to.not.include(\"<customer>\");",
+									"    pm.expect(pm.response.text()).to.include(\"Invalid username and password\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/login/' OR 1=1--/password",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"login",
+								"' OR 1=1--",
+								"password"
+							]
+						},
+						"description": "**Objective:** Verify the application is not vulnerable to basic SQL Injection attacks on the login form.\n\n**Steps:**\n1. Send a login request with a common SQL injection payload in the username field.\n\n**Expected Result:**\n1. The login attempt must fail.\n2. The application should not crash or return a 500 server error.\n3. The response should be a standard 'invalid credentials' error."
+					},
+					"response": []
+				},
+				{
+					"name": "C9 / TC09: Attempt login with XSS script payload",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is NOT 500 Internal Server Error\", function () {",
+									"    pm.response.to.not.have.status(500);",
+									"});",
+									"",
+									"pm.test(\"Login should fail gracefully\", function() {",
+									"    // A good outcome is an error message, not a successful login.",
+									"    pm.expect(pm.response.text()).to.not.include(\"<customer>\");",
+									"    pm.expect(pm.response.text()).to.include(\"could not be found\"); // The API returns a different error for this input",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/login/<script>alert('XSS')</script>/password",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"login",
+								"<script>alert('XSS')<",
+								"script>",
+								"password"
+							]
+						},
+						"description": "**Objective:** Verify the application correctly sanitizes inputs to prevent Cross-Site Scripting (XSS) attacks.\n\n**Steps:**\n1. Send a login request with a basic XSS payload in the username field.\n\n**Expected Result:**\n1. The login attempt must fail.\n2. The application should handle the input as a string and not execute any script.\n3. The system should return a standard error and not a 500-level error."
+					},
+					"response": []
+				}
+			],
+			"description": "Tests for common security vulnerabilities."
+		},
+		{
+			"name": "Usability & Accessibility Tests",
+			"item": [],
+			"description": "Tests for user experience, accessibility, and responsiveness. These are typically manual UI tests."
+		},
+		{
+			"name": "Backend & Integration Tests",
+			"item": [
+				{
+					"name": "C15 / TC15: Verify session management after successful login",
+					"item": [
+						{
+							"name": "Step 1: Successful Login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200 OK\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Customer ID is saved to a variable for session tests\", function () {",
+											"    const xml2js = require('xml2js');",
+											"    xml2js.parseString(pm.response.text(), (err, result) => {",
+											"        if (!err && result.customer && result.customer.id) {",
+											"            const customerId = result.customer.id[0];",
+											"            pm.collectionVariables.set(\"customerId\", customerId);",
+											"            console.log(`Saved customerId: ${customerId}`);",
+											"        } else {",
+											"            console.error(\"Could not parse customer ID from login response.\");",
+											"        }",
+											"    });",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/login/john/demo",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"login",
+										"john",
+										"demo"
+									]
+								},
+								"description": "First, log in to establish a session and get the customer ID."
+							},
+							"response": []
+						},
+						{
+							"name": "Step 2: Get Accounts (Requires Login Session)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200 OK\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response contains accounts list\", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"<accounts>\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/customers/{{customerId}}/accounts",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"customers",
+										"{{customerId}}",
+										"accounts"
+									]
+								},
+								"description": "After logging in, use the established session (and saved `customerId`) to access a protected resource. This verifies the session is active and valid."
+							},
+							"response": []
+						}
+					],
+					"description": "**Objective:** Verify that a user's session is correctly created and maintained after a successful login, allowing them to access protected resources.\n\n**How it works:**\nThis test is a two-step process:\n1.  **Step 1:** A successful login is performed. A test script extracts the `customerId` from the response and saves it as a collection variable.\n2.  **Step 2:** A second request is made to an endpoint that requires authentication (`/customers/{customerId}/accounts`). This request uses the `customerId` variable. If it succeeds, it proves the session created in Step 1 is valid.\n\nRun this folder using the Postman Collection Runner to ensure sequential execution."
+				},
+				{
+					"name": "C14 / TC14: Verify audit log entry after login attempt",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						},
+						"description": "**NOT AUTOMATABLE VIA PUBLIC API**\n\n**Objective:** Verify that every login attempt (successful or failed) creates an entry in a backend audit log.\n\n**Reason:**\nThis is a white-box test that requires access to the application's backend server, database, or log files. The public ParaBank API does not expose an endpoint to view these logs.\n\n**Conceptual Steps (in a real environment):**\n1. Make a login API call.\n2. Connect to the application's database or log server.\n3. Query the audit log table/file.\n4. Verify that a new entry exists corresponding to the login attempt."
+					},
+					"response": []
+				}
+			],
+			"description": "Tests for backend processes like logging and session management."
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://parabank.parasoft.com/parabank/services/bank",
+			"type": "string"
+		},
+		{
+			"key": "customerId",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

@@ -282,3 +282,76 @@ Tests for backend processes like logging and session management.
 | :------------- | :--------------------------------------------------------------------- |
 | `baseUrl`      | The base URL for the ParaBank API endpoint.                            |
 | `customerId`   | Stores the customer ID after a successful login. It is set dynamically and used by subsequent requests to test session-dependent functionality. |
+
+
+# ParaBank Login API Test Suite (JMeter)
+
+This repository contains a comprehensive Apache JMeter test plan (`.jmx`) for testing the login functionality of the ParaBank application. The plan is a direct conversion of the scenarios outlined in the "ParaBank Login Test Suite" Postman collection, covering functional, security, and integration API tests.
+
+## Overview
+
+This test plan automates the process of validating the ParaBank REST API's login endpoint. It is designed for QA professionals to quickly assess the core login behavior, check for common security vulnerabilities, and verify backend session management.
+
+### Key Features
+
+*   **Comprehensive Coverage:** Includes positive, negative, and edge-case scenarios for the login process.
+*   **Mirrors Postman Collection:** The test plan is structured with `Transaction Controllers` to logically group tests into Functional, Security, and Integration suites, matching the original collection's design.
+*   **Dynamic Data Handling:** Automatically extracts the `customerId` from a successful login response and reuses it in subsequent requests to test authenticated endpoints (session management).
+*   **Clear Assertions:** Every request includes `Response Assertions` to validate status codes and response body content, ensuring each test has a clear pass/fail condition.
+*   **Easy Configuration:** Uses an `HTTP Request Defaults` element to manage the base URL, making it simple to retarget the tests to different environments (e.g., local, staging, production).
+
+## Test Scenarios Included
+
+The following automated API test scenarios are included in this plan:
+
+###  Functional Tests
+*   **C1 / TC01:** Login with valid username and password.
+*   **C2 / TC02:** Login with valid username and invalid password.
+*   **C3 / TC03:** Login with invalid username and valid password.
+*   **C4 / TC04:** Attempt login with empty username and password fields.
+*   **C5 / TC05:** Attempt login with whitespace-only username and password.
+
+### Security Tests
+*   **C8 / TC08:** Attempt login with a common SQL Injection payload (`' OR 1=1--`).
+*   **C9 / TC09:** Attempt login with a common XSS payload (`<script>alert('XSS')</script>`).
+*   **C10 / TC13:** Simulate multiple failed login attempts.
+    *   *Note: This is a conceptual test to demonstrate the sequence. Actual account lockout depends on server-side configuration, which may not be active on the public ParaBank instance.*
+
+### Backend & Integration Tests
+*   **C15 / TC15:** Verify session management with a two-step process:
+    1.  Perform a successful login and extract the `customerId`.
+    2.  Use the extracted `customerId` to request a protected resource (`/customers/{customerId}/accounts`), verifying the session is valid.
+
+---
+
+## Excluded Scenarios (Manual/UI Tests)
+
+The following scenarios from the original Postman collection are designed for manual UI testing and **cannot be automated via an API testing tool** like JMeter. They have been intentionally excluded from this test plan.
+
+*   **C7 / TC07: Click “Register” link** (UI navigation)
+*   **C11 / TC10: Verify password masking** (Front-end HTML property)
+*   **C12 / TC11: Navigate form using only keyboard** (Browser accessibility)
+*   **C13 / TC12: Responsive design on mobile device** (CSS rendering)
+*   **C14 / TC14: Verify audit log entry** (Requires direct backend/database access)
+
+---
+
+## How to Use
+
+1.  **Prerequisites:** Ensure you have the latest version of [Apache JMeter](https://jmeter.apache.org/download_jmeter.cgi) installed.
+2.  **Open the Plan:** Launch JMeter and open the `ParaBank_Login_Suite.jmx` file via `File > Open`.
+3.  **Run the Test:** Click the green "Start" button (play icon) in the toolbar to execute all scenarios.
+4.  **Analyze Results:** Use the built-in **View Results Tree** and **Summary Report** listeners to see the outcome of each test. Green icons indicate a pass, while red icons indicate a failure. Click on any failed request to inspect the assertion results.
+
+## JMeter Plan Structure
+
+This plan utilizes several key JMeter components to replicate the Postman collection's logic:
+
+| Feature | JMeter Implementation | Description |
+| :--- | :--- | :--- |
+| **Base URL Configuration** | `HTTP Request Defaults` | Sets the base URL (`https://parabank.parasoft.com`) for all requests. |
+| **API Requests** | `HTTP Request Sampler` | Represents each individual API call to a specific endpoint. |
+| **Test Validation** | `Response Assertion` | Checks the response code and body content for expected values. |
+| **Variable Extraction** | `XPath Extractor` | Parses the XML response from a successful login to capture the `customerId`. |
+| **Variable Usage** | `${customerId}` | Injects the captured customer ID into subsequent request paths. |
+| **Logical Grouping** | `Transaction Controller` | Groups related samplers to organize the test plan and reports. |

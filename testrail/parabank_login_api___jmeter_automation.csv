@@ -1,0 +1,18 @@
+"ID","Title","Assigned To","Case ID","Comment","Defects","Elapsed","Estimate","Forecast","In Progress","Plan","Plan ID","Priority","References","Run","Run Configuration","Run ID","Section","Section Depth","Section Description","Status","Tested By","Tested On","Type","Version"
+"T1","TC01: Login with valid username and password","AL ABO","C1","200 OK
+Successful Login
+","","","5s","5s","","","","Medium","","ParaBank Login API - Jmeter Automation","","R1","Functional Tests","1","Tests covering the core functionality of the login process.","Passed","AL ABO","8/16/2025 6:23 AM","Functional",""
+"T2","TC02: Login with valid username and invalid password","AL ABO","C2","400 Bad Request
+Response body """"Invalid username and/or password""""","","","3s","3s","","","","Medium","","ParaBank Login API - Jmeter Automation","","R1","Functional Tests","1","Tests covering the core functionality of the login process.","Passed","AL ABO","8/16/2025 6:24 AM","Functional",""
+"T3","TC03: Login with invalid username and valid password","AL ABO","C3","Response body """"Invalid username and/or password""""","","","3s","3s","","","","Medium","","ParaBank Login API - Jmeter Automation","","R1","Functional Tests","1","Tests covering the core functionality of the login process.","Passed","AL ABO","8/16/2025 6:25 AM","Functional",""
+"T4","TC04: Submit login form with empty fields","AL ABO","C4","404 Not Found","","","2s","2s","","","","Medium","","ParaBank Login API - Jmeter Automation","","R1","Functional Tests","1","Tests covering the core functionality of the login process.","Passed","AL ABO","8/16/2025 6:25 AM","Functional",""
+"T5","TC05: Submit login form with whitespace-only input","AL ABO","C5","big security failure/risk
+${basePath}/login/%20/%20
+HTTP/1.1 200 OK
+with complete response body of user info 16652","","","3s","3s","","","","Medium","","ParaBank Login API - Jmeter Automation","","R1","Functional Tests","1","Tests covering the core functionality of the login process.","Failed","AL ABO","8/16/2025 6:28 AM","Functional",""
+"T6","TC08: Attempt login with SQL injection payload","AL ABO","C8","HTTP/1.1 403 Forbidden
+response body contain source code of the page","","","10s","10s","","","","Medium","","ParaBank Login API - Jmeter Automation","","R1","Security Tests","1","Tests for common security vulnerabilities.","Failed","AL ABO","8/16/2025 6:33 AM","Security",""
+"T7","TC09: Attempt login with XSS script payload","AL ABO","C9","response body contain source code of the page
+No response code and java.net.URISyntaxException","","","10s","10s","","","","Medium","","ParaBank Login API - Jmeter Automation","","R1","Security Tests","1","Tests for common security vulnerabilities.","Failed","AL ABO","8/16/2025 6:34 AM","Security",""
+"T8","TC13: Account lockout after 5 failed login attempts","AL ABO","C10","Account didn't lock after 5 attempts.","","","8s","8s","","","","Medium","","ParaBank Login API - Jmeter Automation","","R1","Security Tests","1","Tests for common security vulnerabilities.","Failed","AL ABO","8/16/2025 6:37 AM","Security",""
+"T9","TC15: Verify session management after successful login","AL ABO","C15","using  customerId to access the info via management ${basePath}/customers/${customerId}/accounts after login works","","","8s","8s","","","","Medium","","ParaBank Login API - Jmeter Automation","","R1","Backend & Integration Tests","1","Tests for backend processes like logging and session management.","Passed","AL ABO","8/16/2025 6:38 AM","Security",""
