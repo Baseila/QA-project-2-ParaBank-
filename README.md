@@ -376,7 +376,7 @@ This document summarizes the testing activities and results for the **Customer L
 | **Feature Under Test**| Customer Login |
 | **Test Cycle** | Sprint 2 - Manual & Automated Execution |
 | **Build Version** | Build 2025.08.15.1 |
-| **Report Prepared By**| Baseeil Jaber |
+| **Report Prepared By**| Ali |
 | **Date of Report** | August 16, 2025 |
 
 ---
