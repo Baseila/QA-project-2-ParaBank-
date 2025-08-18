@@ -74,7 +74,7 @@ Testing will be conducted in the following environment:
 - **Web browser compatibility:** Chrome, Firefox, Edge, Safari
 - **Operating systems:** Windows 10/11, macOS, Android, iOS
 - **Network:** Stable internet connection for HTTPS traffic
-- **API Tool:** `Postman` configured with ParaBank API endpoints
+- **API Tool:** `Postman` & `Jmeter` configured with ParaBank API endpoints
 
 ### 7. Test Cases Reference
 
