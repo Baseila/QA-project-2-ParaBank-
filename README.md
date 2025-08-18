@@ -73,7 +73,6 @@ Testing will follow a combination of manual UI testing and API-level testing usi
 Testing will be conducted in the following environment:
 - **Web browser compatibility:** Chrome, Firefox, Edge, Safari
 - **Operating systems:** Windows 10/11, macOS, Android, iOS
-- **Test server:** A dedicated server with a copy of the production database
 - **Network:** Stable internet connection for HTTPS traffic
 - **API Tool:** `Postman` configured with ParaBank API endpoints
 
